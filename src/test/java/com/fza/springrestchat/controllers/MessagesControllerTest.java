@@ -2,7 +2,7 @@ package com.fza.springrestchat.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fza.springrestchat.SpringRestChatApplication;
-import com.fza.springrestchat.models.Room;
+import com.fza.springrestchat.models.Messages;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import com.fza.springrestchat.repositories.RoomRepository;
+import com.fza.springrestchat.repositories.MessagesRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest(classes = SpringRestChatApplication.class)
 @AutoConfigureMockMvc
-public class RoomControllerTest {
+public class MessagesControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -36,87 +36,89 @@ public class RoomControllerTest {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private RoomRepository repository;
+    private MessagesRepository repository;
 
-    private Room testRoom;
-    private Room testSavedRoom;
-    private final String API = "/rooms/";
-    private final String API_ID = "/rooms/{id}";
+    private Messages testMessages;
+    private Messages testSavedMessages;
+    private final String API = "/messages/";
+    private final String API_ID = "/messages/{id}";
 
     @BeforeEach
-    private void generateTestRooms() {
-        Room preparingRoom = Room.of("room1");
-        preparingRoom.setId(1);
-        testSavedRoom = preparingRoom;
+    private void generateTestMessages() {
 
-        testRoom = Room.of("room1");
+
+        Messages preparingMessages = Messages.of("text1");
+        preparingMessages.setId(1);
+        testSavedMessages = preparingMessages;
+
+        testMessages = Messages.of("text1");
     }
 
     @Test
     @WithMockUser
-    public void findAllRooms() throws Exception {
-        List<Room> rooms = List.of(
-                testSavedRoom
+    public void findAllMessages() throws Exception {
+        List<Messages> messages = List.of(
+                testSavedMessages
         );
 
-        when(repository.findAll()).thenReturn(rooms);
+        when(repository.findAll()).thenReturn(messages);
 
         MvcResult result = mockMvc.perform(get(API))
                 .andExpect(status().isOk())
                 .andReturn();
 
-        String expectedJson = objectMapper.writeValueAsString(rooms);
+        String expectedJson = objectMapper.writeValueAsString(messages);
 
         assertEquals(expectedJson, result.getResponse().getContentAsString());
     }
 
     @Test
     @WithMockUser
-    public void findRoomById() throws Exception {
-        when(repository.findById(1)).thenReturn(Optional.of(testSavedRoom));
+    public void findMessageById() throws Exception {
+        when(repository.findById(1)).thenReturn(Optional.of(testSavedMessages));
 
         MvcResult result = mockMvc.perform(get(API_ID, 1))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
 
-        String expectedJson = objectMapper.writeValueAsString(testSavedRoom);
+        String expectedJson = objectMapper.writeValueAsString(testSavedMessages);
 
         assertEquals(expectedJson, result.getResponse().getContentAsString());
     }
 
     @Test
     @WithMockUser
-    public void createRoom() throws Exception {
-        when(repository.save(testRoom)).thenReturn(testSavedRoom);
+    public void createMessage() throws Exception {
+        when(repository.save(testMessages)).thenReturn(testSavedMessages);
 
         MvcResult result = mockMvc.perform(post(API)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(testRoom)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(testMessages)))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
 
-        String expectedJson = objectMapper.writeValueAsString(testSavedRoom);
+        String expectedJson = objectMapper.writeValueAsString(testSavedMessages);
 
         assertEquals(expectedJson, result.getResponse().getContentAsString());
     }
 
     @Test
     @WithMockUser
-    public void updateRoom() throws Exception {
-        when(repository.save(testSavedRoom)).thenReturn(testSavedRoom);
+    public void updateMessage() throws Exception {
+        when(repository.save(testSavedMessages)).thenReturn(testSavedMessages);
         when(repository.existsById(1)).thenReturn(true);
 
         mockMvc.perform(put(API_ID, 1)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(testSavedRoom)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(testSavedMessages)))
                 .andExpect(status().isOk());
     }
 
     @Test
     @WithMockUser
-    public void deleteRoom() throws Exception {
+    public void deleteMessage() throws Exception {
         doNothing().when(repository).deleteById(1);
 
         mockMvc.perform(delete(API_ID, 1))
