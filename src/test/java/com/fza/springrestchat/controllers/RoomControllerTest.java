@@ -1,7 +1,7 @@
 package com.fza.springrestchat.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fza.springrestchat.Application;
+import com.fza.springrestchat.SpringRestChatApplication;
 import com.fza.springrestchat.models.Room;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest(classes = Application.class)
+@SpringBootTest(classes = SpringRestChatApplication.class)
 @AutoConfigureMockMvc
 public class RoomControllerTest {
 

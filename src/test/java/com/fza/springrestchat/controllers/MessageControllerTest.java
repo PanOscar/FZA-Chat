@@ -1,6 +1,7 @@
 package com.fza.springrestchat.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fza.springrestchat.SpringRestChatApplication;
 import com.fza.springrestchat.models.Message;
 import com.fza.springrestchat.models.Room;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +14,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import com.fza.springrestchat.Application;
 import com.fza.springrestchat.repositories.MessageRepository;
 
 import java.util.List;
@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest(classes = Application.class)
+@SpringBootTest(classes = SpringRestChatApplication.class)
 @AutoConfigureMockMvc
 public class MessageControllerTest {
 

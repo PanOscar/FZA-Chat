@@ -10,7 +10,7 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootApplication
 @EnableAspectJAutoProxy
 @ComponentScan(basePackages = {"com.fza.springrestchat.controllers"})
-public class Application {
+public class SpringRestChatApplication {
 
     @Bean
     public RestTemplate getTemplate() {
@@ -18,7 +18,7 @@ public class Application {
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(SpringRestChatApplication.class, args);
     }
 
 }
