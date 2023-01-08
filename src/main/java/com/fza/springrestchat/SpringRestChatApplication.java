@@ -11,7 +11,6 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootApplication
 @EnableAspectJAutoProxy
 @ComponentScan(basePackages = {"com.fza.springrestchat.controllers"})
-@EnableJpaRepositories("com.fza.springrestchat.repositories")
 public class SpringRestChatApplication {
 
     @Bean

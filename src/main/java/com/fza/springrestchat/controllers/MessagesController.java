@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -16,6 +18,9 @@ import java.util.stream.StreamSupport;
 public class MessagesController {
 
     private final MessagesRepository messagesRepository;
+
+    @Autowired
+    EntityManager entityManager;
 
     @Autowired
     public MessagesController(MessagesRepository repository) {
@@ -29,12 +34,16 @@ public class MessagesController {
     }
 
     @GetMapping(value = "/find")
-    public ResponseEntity<Messages> getById(@RequestParam String fromUsername, @RequestParam String toUsername) {
-        var message = messagesRepository.findMessagesByToUsernameAndFromUsername(fromUsername, toUsername);
+    public ResponseEntity<List<Messages>> getById(@RequestParam String fromUsername, @RequestParam String toUsername) {
+        String sql = "SELECT * FROM message WHERE from_username = ? AND to_username = ?";
+        Query query = entityManager.createNativeQuery(sql, Messages.class);
+        query.setParameter(1, fromUsername);
+        query.setParameter(2, toUsername);
+        List<Messages> messages = query.getResultList();
 
         return new ResponseEntity<>(
-                message,
-                message != null ? HttpStatus.OK : HttpStatus.NOT_FOUND);
+                messages,
+                messages != null ? HttpStatus.OK : HttpStatus.NOT_FOUND);
     }
 
     @PostMapping(path = "/newMessage", consumes = {"application/json"})
