@@ -5,11 +5,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 @EnableAspectJAutoProxy
 @ComponentScan(basePackages = {"com.fza.springrestchat.controllers"})
+@EnableJpaRepositories("com.fza.springrestchat.repositories")
 public class SpringRestChatApplication {
 
     @Bean

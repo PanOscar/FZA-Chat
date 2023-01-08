@@ -4,7 +4,6 @@ import com.fza.springrestchat.models.Messages;
 import com.fza.springrestchat.repositories.MessagesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,13 +28,13 @@ public class MessagesController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<Messages> getById(@PathVariable("id") int id) {
-        var message = messagesRepository.findById(id);
+    @GetMapping(value = "/find")
+    public ResponseEntity<Messages> getById(@RequestParam String fromUsername, @RequestParam String toUsername) {
+        var message = messagesRepository.findMessagesByToUsernameAndFromUsername(fromUsername, toUsername);
 
         return new ResponseEntity<>(
-                message.orElse(new Messages()),
-                message.isPresent() ? HttpStatus.OK : HttpStatus.NOT_FOUND);
+                message,
+                message != null ? HttpStatus.OK : HttpStatus.NOT_FOUND);
     }
 
     @PostMapping(path = "/newMessage", consumes = {"application/json"})

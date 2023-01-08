@@ -24,10 +24,10 @@ public class Messages {
     private String message;
 
     @Column(nullable = false)
-    private String from_username;
+    private String fromUsername;
 
     @Column(nullable = false)
-    private String to_username;
+    private String toUsername;
 
     public Messages() {
         this.created_date = new Date();
