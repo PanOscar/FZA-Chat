@@ -2,6 +2,7 @@ package com.fza.springrestchat.controllers;
 
 import com.fza.springrestchat.models.Messages;
 import com.fza.springrestchat.repositories.MessagesRepository;
+import com.fza.springrestchat.services.MessagesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +23,9 @@ public class MessagesController {
     @Autowired
     EntityManager entityManager;
 
+
     @Autowired
-    public MessagesController(MessagesRepository repository) {
+    public MessagesController(MessagesRepository repository, MessagesService service) {
         this.messagesRepository = repository;
     }
 
@@ -61,6 +63,7 @@ public class MessagesController {
             return new ResponseEntity<>(HttpStatus.CREATED);
         }
         messagesRepository.save(messages);
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -69,4 +72,5 @@ public class MessagesController {
         messagesRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
 }
